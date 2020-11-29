@@ -4,6 +4,6 @@
   service:
     name: sshd
     enabled: yes
-    state: restarted
+    state: reloaded
   listen: restart sshd
 
