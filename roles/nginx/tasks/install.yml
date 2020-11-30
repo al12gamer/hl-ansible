@@ -1,0 +1,7 @@
+---
+  - name: Install the latest version of Nginx
+    become: true
+    dnf:
+      name: nginx
+      state: present
+    notify: restart nginx
