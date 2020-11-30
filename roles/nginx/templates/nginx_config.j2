@@ -1,5 +1,6 @@
 # For more information on configuration, see:
 #   * Official English Documentation: http://nginx.org/en/docs/
+#   * Official Russian Documentation: http://nginx.org/ru/docs/
 
 user nginx;
 worker_processes auto;
@@ -43,13 +44,13 @@ http {
         listen 443 ssl default_server;
         server_name _;
         server_name_in_redirect off;
+        ssl_certificate /etc/letsencrypt/live/engelcc.com-0001/fullchain.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/engelcc.com-0001/privkey.pem; # managed by Certbot
         ssl_dhparam /etc/letsencrypt/dhparam.pem; # managed by Certbot
         location / {
             return 404;
         }
     }
-
-}
 
     # Load modular configuration files from the /etc/nginx/conf.d directory.
     # See http://nginx.org/en/docs/ngx_core_module.html#include
