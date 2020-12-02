@@ -18,14 +18,20 @@
     name: firewalld
     enabled: "{{ firewalld_enabled }}"
 
+- name: permit traffic in default zone for ssh service
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+
 - name: permit traffic in default zone for http service
-  ansible.posix.firewalld:
+  firewalld:
     service: http
     permanent: yes
     state: enabled
 
 - name: permit traffic in default zone for https service
-  ansible.posix.firewalld:
+  firewalld:
     service: https
     permanent: yes
     state: enabled
