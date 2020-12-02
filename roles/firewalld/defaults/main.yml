@@ -1,5 +1,5 @@
 ---
-firewalld_state: started
+# firewalld_state: started
 firewalld_enabled: true
 
 
