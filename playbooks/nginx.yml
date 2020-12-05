@@ -1,4 +1,11 @@
 ---
 - hosts: all
+  become: true
+  vars:
+    firewalld_allowed_services:
+      - http
+      - https
+
   roles:
     - nginx
+    - firewalld
