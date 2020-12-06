@@ -1,0 +1,10 @@
+- hosts: all
+  become: true
+
+  vars:
+    certbot_auto_renew_user: ansible
+    certbot_auto_renew_minute: "20"
+    certbot_auto_renew_hour: "5"
+
+  roles:
+    - certbot
