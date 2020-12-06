@@ -1,0 +1,22 @@
+---
+# defaults file for certbot-cloudflare
+
+# Email address for Cloudflare Global API Key
+certbot_cloudflare_email: "example@example.com"
+# Your Global API Key from your account
+# ansible-vault encrypt_string 'cloudflareAPIKey' --name 'certbot_cloudflare_api_key'
+certbot_cloudflare_api_key: ''
+
+certbot_create_standalone_stop_services: []
+certbot_create_if_missing: yes
+
+certbot_dir:  /opt/certbot
+
+# Use the ACME v2 staging URI for testing things
+certbot_cloudflare_acme_test: "https://acme-staging-v02.api.letsencrypt.org/directory"
+# Production ACME v2 API endpoint
+certbot_cloudflare_acme_live: "https://acme-v02.api.letsencrypt.org/directory"
+
+# Set The Endpoint
+# certbot_cloudflare_acme_server: "{{ certbot_cloudflare_acme_test }}" # testing
+certbot_cloudflare_acme_server: "{{ certbot_cloudflare_acme_live }}" # live
