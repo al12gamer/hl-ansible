@@ -1,0 +1,58 @@
+---
+- hosts: all
+#  become: true
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    #- firewalld
+    - nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/jellyfin.conf.j2
+        dest: /etc/nginx/conf.d/jellyfin.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Pull Jellyfin Container
+      containers.podman.podman_image:
+        name: "docker.io/linuxserver/jellyfin"
+        tag: latest
+        pull: yes
+        state: present
+
+    - name: Restart Jellyfin Container
+      containers.podman.podman_container:
+        name: jellyfin
+        image: linuxserver/jellyfin
+        state: started
+        restart: yes
+        #etc_hosts:
+        #  jellyfin.engelcc.com: "127.0.0.1"
+        #  other: "127.0.0.1"
+        restart_policy: "no"
+        privileged: yes
+        network: host
+        #expose:
+        #  - 8096
+        publish: 8096:8096
+        volume:
+          - /mnt/jellyfin/config:/config
+          - /mnt/jellyfin/cache:/cache
+          - /mnt/plex/TV:/data/tvshows
+          - /mnt/plex/Movies:/data/movies
+        detach: yes
+
+# podman run \
+#     --cgroup-manager=cgroupfs \
+#     --privileged \
+#     --volume /mnt/jellyfin/config:/config \
+#     --volume /mnt/jellyfin/cache:/cache \
+#     --volume /mnt/plex/TV:/data/tvshows \
+#     --volume /mnt/plex/Movies:/data/movies \
+#     --net=host \
+#     linuxserver/jellyfin

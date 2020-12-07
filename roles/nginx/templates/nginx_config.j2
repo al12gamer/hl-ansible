@@ -45,7 +45,9 @@ http {
         server_name _;
         server_name_in_redirect off;
         # ssl_certificate /etc/letsencrypt/live/engelcc.com-0001/fullchain.pem; # managed by Certbot
+        ssl_certificate /etc/letsencrypt/live/engelcc.com/fullchain.pem; # managed by Certbot
         # ssl_certificate_key /etc/letsencrypt/live/engelcc.com-0001/privkey.pem; # managed by Certbot
+        ssl_certificate_key /etc/letsencrypt/live/engelcc.com/privkey.pem; # managed by Certbot
         # ssl_dhparam /etc/letsencrypt/dhparam.pem; # managed by Certbot
         location / {
             return 404;
