@@ -1,0 +1,10 @@
+---
+# Firewall Settings
+#firewall_allowed_tcp_ports:
+#  - "8096/tcp" #firewall-cmd --add-port=8096/tcp
+firewalld_allowed_services:
+  - ssh
+  - http
+  - https
+
+# Nginx Settings
