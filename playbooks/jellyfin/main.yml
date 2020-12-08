@@ -30,29 +30,22 @@
         name: jellyfin
         image: linuxserver/jellyfin
         state: started
-        restart: yes
-        #etc_hosts:
-        #  jellyfin.engelcc.com: "127.0.0.1"
-        #  other: "127.0.0.1"
+        #restart: yes
+        recreate: yes
+        hostname: jellyfin.engelcc.com
         restart_policy: "no"
-        privileged: yes
-        network: host
-        #expose:
-        #  - 8096
+        privileged: no #yes 
+        network: slirp4netns
         publish: 8096:8096
+        env:
+            PUID: '1000'
+            PGID: '1000'
         volume:
-          - /mnt/jellyfin/config:/config
-          - /mnt/jellyfin/cache:/cache
-          - /mnt/plex/TV:/data/tvshows
-          - /mnt/plex/Movies:/data/movies
+          - /mnt/jellyfin/config:/config:rw
+          - /mnt/jellyfin/cache:/cache:rw
+          - /mnt/plex/TV:/data/tvshows:ro
+          - /mnt/plex/Anime:/data/Anime:ro
+          - /mnt/plex/Movies:/data/movies:ro
+          - /mnt/plex/4k_Movies:/data/4k_movies:ro
         detach: yes
-
-# podman run \
-#     --cgroup-manager=cgroupfs \
-#     --privileged \
-#     --volume /mnt/jellyfin/config:/config \
-#     --volume /mnt/jellyfin/cache:/cache \
-#     --volume /mnt/plex/TV:/data/tvshows \
-#     --volume /mnt/plex/Movies:/data/movies \
-#     --net=host \
-#     linuxserver/jellyfin
+      tags: container-restart
