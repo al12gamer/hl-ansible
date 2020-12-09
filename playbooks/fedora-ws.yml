@@ -1,0 +1,133 @@
+---
+- hosts: xps15
+
+  tasks:
+    - name: add rpmfusion repos
+      become: yes
+      dnf:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-33.noarch.rpm
+        - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-33.noarch.rpm
+
+    - name: Add the flathub flatpak repository remote to the user installation
+      become: yes
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+
+    #-- VSCode
+    - name: add VSCode repo
+      become: yes
+      yum_repository:
+        name: code
+        description: Visual Studio Code Repo
+        file: vscode
+        baseurl: https://packages.microsoft.com/yumrepos/vscode
+        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+        gpgcheck: yes
+        enabled: yes
+
+    - name: install VS Code
+      become: yes
+      dnf:
+        name: code
+        state: present
+
+    #-- Sublime
+    - name: add sublime text repo
+      become: yes
+      yum_repository:
+        name: sublime-text
+        description: Sublime Text - Stable
+        file: sublime-text
+        baseurl: https://download.sublimetext.com/rpm/stable/x86_64
+        gpgkey: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+        gpgcheck: yes
+        enabled: yes
+
+    - name: install sublime text 
+      become: yes
+      dnf:
+        name: sublime-text
+        state: present
+
+    #-- Needs to be tested
+    #-- Mullvad VPN
+    #- name: download mullvad rpm
+    #  become: yes
+    #  command: wget --content-disposition https://mullvad.net/download/rpm/latest -o mullvad.rpm
+    #  warn: false
+    # 
+    #- name: install mullvad rpm
+    #  become: yes
+    #  command: dnf install -y mullvad.rpm
+    #  warn: false
+
+    #-- Install workstation packages
+    - name: install ws packages
+      become: yes
+      dnf:
+        name: "{{ packages }}"
+        state: present
+      vars:
+        packages:
+        - chromium
+        - curl
+        - dconf-editor
+        - gnome-tweaks
+        - ffmpeg-libs
+        - hexchat
+        - htop
+        - intel-undervolt
+        - iotop
+        - jq
+        - lm_sensors
+        - ncdu
+        - neofetch
+        - powertop
+        - terminator
+        - tlp
+        - tmux
+        - tree
+        - vim
+        - wget
+    
+    - name: install media codecs
+      become: yes
+      command: dnf groupupdate -y Multimedia
+      warn: false
+
+    #-- Install Flatpaks
+    - name: install bitwarden flatpak
+      become: yes
+      flatpak:
+        name: com.bitwarden
+        state: present
+
+    - name: install postman flatpak
+      become: yes
+      flatpak:
+        name: com.getpostman.Postman
+        state: present
+
+    # Spotify install fails ):
+    #- name: install spotify flatpak
+    #  become: yes
+    #  flatpak:
+    #    name: com.spotify.Client
+    #    state: present
+
+    - name: install steam flatpak
+      become: yes
+      flatpak:
+        name: com.valvesoftware.Steam
+        state: present
+
+    - name: install telegram flatpak
+      become: yes
+      flatpak:
+        name: org.telegram.desktop
+        state: present

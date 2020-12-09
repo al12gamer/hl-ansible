@@ -1,0 +1,167 @@
+---
+- hosts: xps15
+  become: yes
+  vars:
+    user: joey
+  tasks:
+    #-- settings
+    - name: enable night light
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/color/night-light-enabled"
+        value: 'true'
+      tags: settings
+
+    - name: enable scheduled night light time
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/color/night-light-schedule-automatic"
+        value: 'true'
+      tags: settings
+
+    - name: settings - power-button-action
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/power/power-button-action"
+        value: 'nothing'
+      tags: settings
+
+    - name: settings - sleep-inactive-ac-timeout
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-timeout"
+        value: '3600'
+      tags: settings
+
+    - name: settings - sleep-inactive-ac-type
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type"
+        value: 'nothing'
+      tags: settings
+
+    - name: settings - font antialiasing
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/xsettings/antialiasing"
+        value: 'rgba'
+      tags: settings
+
+    - name: settings - font hinting
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/settings-daemon/plugins/xsettings/hinting"
+        value: 'slight'
+      tags: settings
+    
+    #-- themes
+    - name: themes - set shell theme
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/user-theme"
+        value: "'Mojave-dark-alt'"
+      tags: themes
+
+    - name: themes - set background-logo visibility
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/fedorahosted/background-logo-extension/"
+        value: 'true'
+      tags: themes
+
+    #-- workspaces
+    - name: window switcher - current workspace only
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/window-switcher/current-workspace-only"
+        value: 'true'
+      tags: workspaces
+
+    - name: settings - dynamic-workspaces
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/mutter/wayland/keybindings/dynamic-workspaces"
+        value: 'false'
+      tags: workspaces
+
+    - name: set move-to-workspace shortcuts
+      become_user: "{{ user }}"
+      dconf: 
+        key: "/org/gnome/desktop/wm/keybindings/move-to-workspace-{{ item }}"
+        value: "['<Shift><Super>{{ item }}']"
+      loop:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+      tags: workspaces
+
+    - name: set switch-to-workspace shortcuts
+      become_user: "{{ user }}"
+      dconf: 
+        key: "/org/gnome/desktop/wm/keybindings/switch-to-workspace-{{ item }}"
+        value: "['<Super>{{ item }}']"
+      loop:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+      tags: workspaces
+
+    - name: disable switch-to-application shortcuts
+      become_user: "{{ user }}"
+      dconf: 
+        key: "/org/gnome/shell/keybindings/switch-to-application-{{ item }}"
+        value: "['']"
+      loop:
+        - '1'
+        - '2'
+        - '3'
+        - '4'
+        - '5'
+        - '6'
+        - '7'
+        - '8'
+        - '9'
+      tags: workspaces
+    
+    - name: set maximize window horizontally
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/wm/keybindings/maximize-horizontally"
+        value: "['<Super><Alt>Left']"
+      tags: workspaces
+
+    #-- Applications
+    #-- Nautilus
+    - name: nautilus - default-folder-viewer
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/nautilus/preferences/default-folder-viewer"
+        value: "'list-view'"
+      tags: applications
+      
+    - name: nautilus - show-hidden-files
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/nautilus/preferences/show-hidden-files"
+        value: "true"
+      tags: applications
+
+    - name: nautilus - use-tree-view
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/nautilus/list-view/use-tree-view"
+        value: "true"
+      tags: applications
+      
