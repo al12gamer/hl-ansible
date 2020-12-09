@@ -1,0 +1,57 @@
+---
+- hosts: nextcloud
+  gather_facts: yes
+  become: yes
+  vars_files:
+    - /etc/ansible/keys.yml
+  tasks:
+    - name: install boto
+      command: pip install boto
+
+    # Backup user files
+    - name: sync user files to s3
+      s3_sync:
+        aws_access_key: "{{ AWS_ACCESS_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        bucket: engelcc-backups
+        key_prefix: nextcloud/data/joey/files/
+        mode: push
+       # object: /nextcloud/
+        file_root: /var/www/html/nextcloud/data/joey/files
+
+    # Backup DB
+    - name: get date
+      shell:
+        cmd: date +%Y%m%d-%H%M
+      register: date
+
+    - name: create backup dir
+      file:
+        path: /tmp/nextcloud/{{ date.stdout }}/
+        state: directory
+        mode: '775'
+        owner: ansible
+        group: ansible
+
+    - name: dump nextcloud db
+      shell: sqlite3 /var/www/html/nextcloud/data/owncloud.db .dump > /tmp/nextcloud/{{ date.stdout }}/nextcloud-{{ date.stdout }}.db
+
+    - name: set file permissions
+      file:
+        path: /tmp/nextcloud/{{ date.stdout }}/nextcloud-{{ date.stdout }}.db
+        owner: ansible
+        group: ansible
+ 
+    - name: zip backup
+      shell: gzip -9 /tmp/nextcloud/{{ date.stdout }}/nextcloud-{{ date.stdout }}.db
+
+    - name: sync db to s3
+      s3_sync:
+        aws_access_key: "{{ AWS_ACCESS_ID }}"
+        aws_secret_key: "{{ AWS_SECRET_KEY }}"
+        ec2_region: "{{ AWS_REGION }}"
+        bucket: engelcc-backups
+        key_prefix: nextcloud/db/
+        mode: push
+        file_root: /tmp/nextcloud/{{ date.stdout }}
