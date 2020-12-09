@@ -1,0 +1,3 @@
+# ignore ansible-galaxy roles
+roles/githubixx.ansible_role_wireguard/
+
