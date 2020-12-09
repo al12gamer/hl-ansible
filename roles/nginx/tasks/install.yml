@@ -1,5 +1,5 @@
 ---
-  - name: Install the latest version of Nginx
+  - name: Verify Nginx is Installed
     become: true
     dnf:
       name: nginx
