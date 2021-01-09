@@ -9,7 +9,7 @@
 
   - name: Enable DNF module for CentOS 8+.
     shell: |
-      dnf config-manager --set-enabled PowerTools
+      dnf config-manager --set-enabled powertools
     args:
       warn: false
     register: dnf_module_enable
