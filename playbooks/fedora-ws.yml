@@ -19,22 +19,22 @@
         flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
 
     #-- VSCode
-    - name: add VSCode repo
-      become: yes
-      yum_repository:
-        name: code
-        description: Visual Studio Code Repo
-        file: vscode
-        baseurl: https://packages.microsoft.com/yumrepos/vscode
-        gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-        gpgcheck: yes
-        enabled: yes
+    # - name: add VSCode repo
+    #   become: yes
+    #   yum_repository:
+    #     name: code
+    #     description: Visual Studio Code Repo
+    #     file: vscode
+    #     baseurl: https://packages.microsoft.com/yumrepos/vscode
+    #     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
+    #     gpgcheck: yes
+    #     enabled: yes
 
-    - name: install VS Code
-      become: yes
-      dnf:
-        name: code
-        state: present
+    # - name: install VS Code
+    #   become: yes
+    #   dnf:
+    #     name: code
+    #     state: present
 
     #-- Sublime
     - name: add sublime text repo
@@ -74,20 +74,23 @@
         state: present
       vars:
         packages:
-        - chromium
+        - chromium-browser-privacy
         - curl
         - dconf-editor
-        - gnome-tweaks
         - ffmpeg-libs
+        - gnome-tweaks
+        - git
         - hexchat
         - htop
-        - intel-undervolt
+        # - intel-undervolt # not working w/ firmware update
         - iotop
         - jq
         - lm_sensors
         - ncdu
         - neofetch
+        - pavucontrol
         - powertop
+        - steam
         - terminator
         - tlp
         - tmux
@@ -111,19 +114,6 @@
       become: yes
       flatpak:
         name: com.getpostman.Postman
-        state: present
-
-    # Spotify install fails ):
-    #- name: install spotify flatpak
-    #  become: yes
-    #  flatpak:
-    #    name: com.spotify.Client
-    #    state: present
-
-    - name: install steam flatpak
-      become: yes
-      flatpak:
-        name: com.valvesoftware.Steam
         state: present
 
     - name: install telegram flatpak
