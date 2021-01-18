@@ -19,11 +19,11 @@
         value: 'true'
       tags: settings
 
-    - name: settings - power-button-action
+    - name: settings power-button-action
       become_user: "{{ user }}"
       dconf:
         key: "/org/gnome/settings-daemon/plugins/power/power-button-action"
-        value: 'nothing'
+        value: "'nothing'"
       tags: settings
 
     - name: settings - sleep-inactive-ac-timeout
@@ -37,21 +37,21 @@
       become_user: "{{ user }}"
       dconf:
         key: "/org/gnome/settings-daemon/plugins/power/sleep-inactive-ac-type"
-        value: 'nothing'
+        value: "'nothing'"
       tags: settings
 
     - name: settings - font antialiasing
       become_user: "{{ user }}"
       dconf:
         key: "/org/gnome/settings-daemon/plugins/xsettings/antialiasing"
-        value: 'rgba'
+        value: "'rgba'"
       tags: settings
 
     - name: settings - font hinting
       become_user: "{{ user }}"
       dconf:
         key: "/org/gnome/settings-daemon/plugins/xsettings/hinting"
-        value: 'slight'
+        value: "'slight'"
       tags: settings
     
     #-- themes
@@ -65,7 +65,7 @@
     - name: themes - set background-logo visibility
       become_user: "{{ user }}"
       dconf:
-        key: "/org/fedorahosted/background-logo-extension/"
+        key: "/org/fedorahosted/background-logo-extension/logo-always-visible"
         value: 'true'
       tags: themes
 
