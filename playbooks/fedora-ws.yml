@@ -1,5 +1,5 @@
 ---
-- hosts: xps15
+- hosts: localhost
 
   tasks:
     - name: add rpmfusion repos
@@ -37,22 +37,22 @@
     #     state: present
 
     #-- Sublime
-    - name: add sublime text repo
-      become: yes
-      yum_repository:
-        name: sublime-text
-        description: Sublime Text - Stable
-        file: sublime-text
-        baseurl: https://download.sublimetext.com/rpm/stable/x86_64
-        gpgkey: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-        gpgcheck: yes
-        enabled: yes
+    #- name: add sublime text repo
+    #  become: yes
+    #  yum_repository:
+    #    name: sublime-text
+    #    description: Sublime Text - Stable
+    #    file: sublime-text
+    #    baseurl: https://download.sublimetext.com/rpm/stable/x86_64
+    #    gpgkey: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
+    #    gpgcheck: yes
+    #    enabled: yes
 
-    - name: install sublime text 
-      become: yes
-      dnf:
-        name: sublime-text
-        state: present
+    #- name: install sublime text 
+    #  become: yes
+    #  dnf:
+    #    name: sublime-text
+    #    state: present
 
     #-- Needs to be tested
     #-- Mullvad VPN
