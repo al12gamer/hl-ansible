@@ -1,6 +1,5 @@
 ---
 - hosts: localhost
-
   tasks:
     - name: add rpmfusion repos
       become: yes
@@ -10,49 +9,6 @@
       with_items:
         - https://download1.rpmfusion.org/free/fedora/rpmfusion-free-release-33.noarch.rpm
         - https://download1.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-33.noarch.rpm
-
-    - name: Add the flathub flatpak repository remote to the user installation
-      become: yes
-      flatpak_remote:
-        name: flathub
-        state: present
-        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
-
-    #-- VSCode
-    # - name: add VSCode repo
-    #   become: yes
-    #   yum_repository:
-    #     name: code
-    #     description: Visual Studio Code Repo
-    #     file: vscode
-    #     baseurl: https://packages.microsoft.com/yumrepos/vscode
-    #     gpgkey: https://packages.microsoft.com/keys/microsoft.asc
-    #     gpgcheck: yes
-    #     enabled: yes
-
-    # - name: install VS Code
-    #   become: yes
-    #   dnf:
-    #     name: code
-    #     state: present
-
-    #-- Sublime
-    #- name: add sublime text repo
-    #  become: yes
-    #  yum_repository:
-    #    name: sublime-text
-    #    description: Sublime Text - Stable
-    #    file: sublime-text
-    #    baseurl: https://download.sublimetext.com/rpm/stable/x86_64
-    #    gpgkey: https://download.sublimetext.com/sublimehq-rpm-pub.gpg
-    #    gpgcheck: yes
-    #    enabled: yes
-
-    #- name: install sublime text 
-    #  become: yes
-    #  dnf:
-    #    name: sublime-text
-    #    state: present
 
     #-- Needs to be tested
     #-- Mullvad VPN
@@ -72,8 +28,7 @@
       dnf:
         name: "{{ packages }}"
         state: present
-      vars:
-        packages:
+      with_items:
         - chromium-browser-privacy
         - curl
         - dconf-editor
@@ -90,34 +45,60 @@
         - neofetch
         - pavucontrol
         - powertop
-        - steam
+        - remmina
+        - stow
         - terminator
         - tlp
         - tmux
         - tree
         - vim
+        - wireguard-tools
         - wget
-    
-    - name: install media codecs
-      become: yes
-      command: dnf groupupdate -y Multimedia
-      warn: false
 
-    #-- Install Flatpaks
-    - name: install bitwarden flatpak
+    - name: Add the flathub flatpak repository remote to the user installation
+      become: yes
+      flatpak_remote:
+        name: flathub
+        state: present
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      tags: flatpak-install
+
+    - name: Add the flathub repo for joey
+      become: yes
+      become_user: joey
+      flatpak_remote:
+        name: flathub
+        state: present
+        method: user
+        flatpakrepo_url: https://dl.flathub.org/repo/flathub.flatpakrepo
+      tags: flatpak-install
+
+    #-- Install System Flatpaks
+    - name: Install system flatpak
       become: yes
       flatpak:
-        name: com.bitwarden
+        name: "{{ item }}"
         state: present
+      with_items:
+        - "com.getpostman.Postman"
+        - "com.slack.Slack"
+        - "io.dbeaver.DBeaverCommunity"
+      tags: flatpak-install
 
-    - name: install postman flatpak
-      become: yes
-      flatpak:
-        name: com.getpostman.Postman
-        state: present
-
+    #-- Install User flatpaks
     - name: install telegram flatpak
       become: yes
+      become_user: joey
       flatpak:
-        name: org.telegram.desktop
+        name: "{{ item }}"
         state: present
+        method: user
+      with_items:
+        - "com.discordapp.Discord"
+        - "com.bitwarden.desktop"
+        - "com.spotify.Client"
+        - "im.riot.Riot"
+        - "io.mgba.mGBA"
+        - "org.telegram.desktop"
+      tags: flatpak-install
+
