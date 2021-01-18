@@ -68,6 +68,42 @@
         key: "/org/fedorahosted/background-logo-extension/logo-always-visible"
         value: 'true'
       tags: themes
+    
+    #-- Extensions
+    - name: Extended gestures - up three swipes 
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/extendedgestures/up-three-swipes"
+        value: 'true'
+      tags: extensions
+
+    - name: Extended gestures - down three swipes 
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/extendedgestures/down-three-swipes"
+        value: 'true'
+      tags: extensions
+
+    - name: Extended gestures - down three swipes action  
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/extendedgestures/down-three-action"
+        value: "'overview'"
+      tags: extensions
+
+    - name: Extended gestures - left three swipes action  
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/extendedgestures/left-three-action"
+        value: "'go-forward'"
+      tags: extensions
+
+    - name: Extended gestures - right three swipes action 
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/shell/extensions/extendedgestures/right-three-action"
+        value: "'go-back'"
+      tags: extensions
 
     #-- workspaces
     - name: window switcher - current workspace only
