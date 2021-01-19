@@ -29,6 +29,7 @@
         name: "{{ packages }}"
         state: present
       with_items:
+        - awscli
         - chromium-browser-privacy
         - curl
         - dconf-editor
