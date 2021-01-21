@@ -53,12 +53,47 @@
         key: "/org/gnome/settings-daemon/plugins/xsettings/hinting"
         value: "'slight'"
       tags: settings
-    
+
+    - name: settings - monospace text font
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/interface/monospace-font-name"
+        value: "'Source Code Pro Medium 11'"
+      tags: settings
+
+    - name: settings - document text font
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/interface/document-font-name"
+        value: "'Fira Sans 12'"
+      tags: settings
+
+    - name: settings - interface text font
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/interface/font-name"
+        value: "'IBM Plex Serif 12'"
+      tags: settings
+
+    - name: settings - disable automatic problem reporting
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/privacy/report-technical-problems"
+        value: 'false'
+      tags: settings
+
+    - name: settings - set window button layout
+      become_user: "{{ user }}"
+      dconf:
+        key: "/org/gnome/desktop/wm/preferences/button-layout"
+        value: "'close,maximize:appmenu'"
+      tags: settings
+
     #-- themes
     - name: themes - set shell theme
       become_user: "{{ user }}"
       dconf:
-        key: "/org/gnome/shell/extensions/user-theme"
+        key: "/org/gnome/desktop/interface/gtk-theme"
         value: "'Mojave-dark-alt'"
       tags: themes
 
