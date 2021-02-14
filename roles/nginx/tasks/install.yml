@@ -1,7 +1,0 @@
----
-  - name: Verify Nginx is Installed
-    become: true
-    dnf:
-      name: nginx
-      state: present
-    notify: restart nginx
