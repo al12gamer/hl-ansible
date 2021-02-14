@@ -7,5 +7,5 @@
       - https
 
   roles:
-    - nginx
-    - firewalld
+    - ansible-role-nginx
+    - ansible-role-firewalld

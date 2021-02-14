@@ -6,8 +6,8 @@
     - vars/main.yml
 
   roles:
-    - firewalld
-    - nginx
+    - ansible-role-firewalld
+    - ansible-role-nginx
 
   tasks:
     - name: Copy Nginx server configuration in place.

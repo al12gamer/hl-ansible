@@ -1,5 +1,5 @@
 ---
 - hosts: all
   roles:
-    - ssh
+    - ansible-role-ssh
 
