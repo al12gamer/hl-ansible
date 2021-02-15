@@ -7,3 +7,6 @@ firewalld_allowed_services:
 
 firewalld_allowed_tcp_ports:
   - "8096/tcp"
+
+# Nginx vars
+domain: engelcc.com

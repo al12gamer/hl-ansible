@@ -5,6 +5,7 @@
     firewalld_allowed_services:
       - http
       - https
+    domain: engelcc.com
 
   roles:
     - ansible-role-nginx
