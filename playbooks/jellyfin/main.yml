@@ -1,6 +1,5 @@
 ---
 - hosts: node
-#  become: true
 
   vars_files:
     - vars/main.yml
@@ -47,5 +46,6 @@
           - /mnt/plex/Anime:/data/Anime:ro
           - /mnt/plex/Movies:/data/movies:ro
           - /mnt/plex/4k_Movies:/data/4k_movies:ro
+          - /mnt/music:/data/music:ro
         detach: yes
       tags: container-restart
