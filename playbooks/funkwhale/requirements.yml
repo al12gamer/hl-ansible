@@ -1,0 +1,7 @@
+---
+roles:
+  - firewalld
+  - nginx
+  
+collections:
+  - name: containers.podman

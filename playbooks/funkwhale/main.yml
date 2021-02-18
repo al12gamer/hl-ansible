@@ -1,0 +1,48 @@
+---
+- hosts: node
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - ansible-role-firewalld
+    - ansible-role-nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/funkwhale.conf.j2
+        dest: /etc/nginx/conf.d/funkwhale.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Pull FunkWhale Container
+      containers.podman.podman_image:
+        name: "docker.io/funkwhale/all-in-one"
+        tag: latest
+        pull: yes
+        state: present
+
+    - name: Restart funkwhale Container
+      containers.podman.podman_container:
+        name: funkwhale
+        image: funkwhale/all-in-one
+        state: started
+        #restart: yes
+        recreate: yes
+        hostname: funkwhale.engelcc.com
+        restart_policy: "no"
+        privileged: no #yes 
+        network: slirp4netns
+        publish: 3030:80
+        env:
+            PUID: '1000'
+            PGID: '1000'
+            FUNKWHALE_HOSTNAME: 'funkwhale.engelcc.com'
+            NESTED_PROXY: 1
+        volume:
+          - /mnt/music:/music:ro
+          - /mnt/funkwhale:/data
+        detach: yes
+      tags: container-restart

@@ -1,0 +1,13 @@
+---
+# Firewall Settings
+firewalld_allowed_services:
+  - ssh
+  - http
+  - https
+
+firewalld_allowed_tcp_ports:
+  - "3030/tcp"
+
+# Nginx vars
+subdomain: funkwhale
+domain: engelcc.com
