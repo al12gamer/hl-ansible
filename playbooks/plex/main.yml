@@ -1,0 +1,58 @@
+---
+- hosts: node
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - ansible-role-firewalld
+    - ansible-role-nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/plex.conf.j2
+        dest: /etc/nginx/conf.d/plex.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Create dir for persistent vol
+      file:
+        path: "{{ podman_vol }}"
+        state: directory
+        mode: 0775
+        owner: ansible
+        group: deploy
+      become: yes
+
+    - name: Pull Plex Container
+      containers.podman.podman_image:
+        name: "docker.io/plexinc/pms-docker"
+        tag: latest
+        pull: yes
+        state: present
+
+    - name: Restart Plex Container
+      containers.podman.podman_container:
+        name: plex
+        image: plexinc/pms-docker
+        state: started
+        #restart: yes
+        recreate: yes
+        hostname: "{{ subdomain }}.{{ domain }}"
+        restart_policy: "no"
+        privileged: no #yes 
+        network: slirp4netns
+        publish: "{{ listen_port }}:{{ container_port }}"
+        env:
+            PUID: '1000'
+            PGID: '1000'
+            TZ: 'America/New_York'
+            PLEX_CLAIM: 'claim-rJH-s1YEBaftPZgNE3Sx'
+            ADVERTISE_IP: "https://plex.engelcc.com:32400"
+        volume:
+          - /mnt/music:/data:ro
+          - /mnt/plex:/config
+        detach: yes
+      tags: container-restart
