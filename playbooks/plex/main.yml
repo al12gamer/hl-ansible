@@ -38,7 +38,6 @@
         name: plex
         image: plexinc/pms-docker
         state: started
-        #restart: yes
         recreate: yes
         hostname: "{{ subdomain }}.{{ domain }}"
         restart_policy: "no"
@@ -55,13 +54,17 @@
           - "32413:32413/udp"
           - "32414:32414/udp"
         env:
-            PUID: '1000'
-            PGID: '1000'
+            PUID: '1001'
+            PGID: '1001'
             TZ: 'America/New_York'
             PLEX_CLAIM: 'claim-rJH-s1YEBaftPZgNE3Sx'
             ADVERTISE_IP: "https://plex.engelcc.com:32400"
         volume:
-          - /mnt/music:/data:ro
+          - /mnt/music:/data/music:ro
+          - /mnt/plex/4k_Movies:/data/4k_Movies
+          - /mnt/plex/Movies:/data/Movies
+          - /mnt/plex/Anime:/data/Anime
+          - /mnt/plex/TV:/data/TV
           - /mnt/plex:/config
         detach: yes
       tags: container-restart
