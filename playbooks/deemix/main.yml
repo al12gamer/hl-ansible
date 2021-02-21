@@ -1,0 +1,56 @@
+---
+- hosts: node
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - ansible-role-firewalld
+    - ansible-role-nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/deemix.conf.j2
+        dest: /etc/nginx/conf.d/deemix.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Create dir for persistent vol
+      file:
+        path: "{{ podman_vol }}"
+        state: directory
+        mode: 0775
+        owner: ansible
+        group: deploy
+      become: yes
+
+    - name: Pull Deemix Container
+      containers.podman.podman_image:
+        name: "registry.gitlab.com/bockiii/deemix-docker"
+        tag: latest
+        pull: yes
+        state: present
+
+    - name: Restart Deemix Container
+      containers.podman.podman_container:
+        name: deemix
+        image: 
+        state: started
+        recreate: yes
+        hostname: "{{ subdomain }}.{{ domain }}"
+        restart_policy: "no"
+        privileged: no #yes 
+        network: slirp4netns
+        publish: 
+          - "{{ listen_port }}:{{ container_port }}"
+        env:
+            PUID: '1001'
+            PGID: '1001'
+            ARL: "{{ arl }}"
+        volume:
+          - "{{ podman_vol }}:/config"
+          - "{{ music_vol }}:/downloads"
+        detach: yes
+      tags: container-restart
