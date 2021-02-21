@@ -26,12 +26,19 @@
         group: deploy
       become: yes
 
+    ## podman_image not working after podman 3.x update
+    #- name: Pull Deemix Container
+    #  containers.podman.podman_image:
+    #    name: "registry.gitlab.com/bockiii/deemix-docker"
+    #    tag: latest
+    #    pull: yes
+    #    state: present
+
     - name: Pull Deemix Container
-      containers.podman.podman_image:
-        name: "registry.gitlab.com/bockiii/deemix-docker"
-        tag: latest
-        pull: yes
-        state: present
+      shell: "podman image pull registry.gitlab.com/bockiii/deemix-docker:latest"
+      args:
+        executable: /bin/bash
+      #become: yes
 
     - name: Restart Deemix Container
       containers.podman.podman_container:
@@ -50,7 +57,7 @@
             PGID: '1001'
             ARL: "{{ arl }}"
         volume:
-          - "{{ podman_vol }}:/config"
+          - "{{ config_vol }}:/config"
           - "{{ music_vol }}:/downloads"
         detach: yes
       tags: container-restart

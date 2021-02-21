@@ -18,4 +18,4 @@ ip_address: '192.168.1.110'
 arl: '{{ deezer_arl }}'
 container_port: '6595'
 music_vol: '/mnt/music'
-podman_vol: '/mnt/deemix'
+config_vol: '/mnt/deemix' # default location for container and configs
