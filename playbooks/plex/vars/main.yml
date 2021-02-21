@@ -1,0 +1,18 @@
+---
+# Firewall Settings
+firewalld_allowed_services:
+  - ssh
+  - http
+  - https
+
+firewalld_allowed_tcp_ports:
+  - "32400/tcp"
+
+# Nginx vars
+subdomain: plex
+domain: engelcc.com
+listen_port: '32400'
+ip_address: '192.168.1.110'
+
+container_port: '32400'
+podman_vol: '/mnt/plex'

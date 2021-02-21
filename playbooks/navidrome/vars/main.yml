@@ -1,0 +1,18 @@
+---
+# Firewall Settings
+firewalld_allowed_services:
+  - ssh
+  - http
+  - https
+
+firewalld_allowed_tcp_ports:
+  - "4533/tcp"
+
+# Nginx vars
+subdomain: music
+domain: engelcc.com
+listen_port: '4533'
+ip_address: '192.168.1.110'
+
+container_port: '4533'
+podman_vol: '/mnt/navidrome'
