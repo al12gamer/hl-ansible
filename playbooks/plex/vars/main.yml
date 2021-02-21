@@ -15,4 +15,4 @@ listen_port: '32400'
 ip_address: '192.168.1.110'
 
 container_port: '32400'
-podman_vol: '/mnt/plex'
+podman_vol: '/mnt/plex2'

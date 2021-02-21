@@ -65,6 +65,6 @@
           - /mnt/plex/Movies:/data/Movies
           - /mnt/plex/Anime:/data/Anime
           - /mnt/plex/TV:/data/TV
-          - /mnt/plex:/config
+          - "{{ podman_vol }}:/config"
         detach: yes
       tags: container-restart
