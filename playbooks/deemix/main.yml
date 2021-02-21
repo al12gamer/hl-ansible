@@ -57,7 +57,7 @@
             PGID: '1001'
             ARL: "{{ arl }}"
         volume:
-          - "{{ config_vol }}:/config"
+          - "{{ podman_vol }}:/config"
           - "{{ music_vol }}:/downloads"
         detach: yes
       tags: container-restart
