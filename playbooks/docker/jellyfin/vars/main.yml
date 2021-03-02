@@ -1,0 +1,16 @@
+---
+# Firewall Settings
+firewalld_allowed_services:
+  - ssh
+  - http
+  - https
+
+firewalld_allowed_tcp_ports:
+  - "8096/tcp"
+
+# Nginx vars
+subdomain: jellyfin
+domain: engelcc.com
+ip_address: '192.168.1.110'
+listen_port: '8096' #  external port nginx will listen on
+container_port: '8096' # container port the {{ listen_port }} is mapped to 

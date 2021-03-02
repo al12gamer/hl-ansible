@@ -1,0 +1,49 @@
+---
+- hosts: node
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - ansible-role-firewalld
+    - ansible-role-nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/jellyfin.conf.j2
+        dest: /etc/nginx/conf.d/jellyfin.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Pull Jellyfin Container
+      containers.podman.podman_image:
+        name: "docker.io/jellyfin/jellyfin"
+        tag: latest
+        pull: yes
+        state: present
+
+    - name: Restart Jellyfin Container
+      community.docker.docker_container:
+        name: jellyfin
+        image: jellyfin/jellyfin
+        state: started
+        recreate: yes
+        hostname: "{{ subdomain }}.{{ domain }}"
+        restart_policy: "unless-stopped"
+        network_mode: "bridge"
+        ports: 
+          - "8096:8096"
+        env:
+            JELLYFIN_PublishedServerUrl: "http://jellyfin.engelcc.com"
+        volumes:
+          - /mnt/jellyfin/config:/config
+          - /mnt/jellyfin/cache:/cache
+          - /mnt/plex/TV:/data/tvshows
+          - /mnt/plex/Anime:/data/Anime
+          - /mnt/plex/Movies:/data/movies
+          - /mnt/plex/4k_Movies:/data/4k_movies
+          - /mnt/music:/data/music
+        detach: yes
+
