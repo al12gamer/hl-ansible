@@ -15,7 +15,6 @@ listen_port: '6595'
 ip_address: '192.168.1.110'
 
 # Playbook Vars
-arl: '{{ deezer_arl }}'
 container_port: '6595'
 music_vol: '/mnt/music'
 podman_vol: '/mnt/deemix' # default location for container and configs

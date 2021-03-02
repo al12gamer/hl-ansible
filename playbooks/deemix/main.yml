@@ -43,7 +43,7 @@
     - name: Restart Deemix Container
       containers.podman.podman_container:
         name: deemix
-        image: 
+        image: bockiii/deemix-docker
         state: started
         recreate: yes
         hostname: "{{ subdomain }}.{{ domain }}"
@@ -57,7 +57,7 @@
             PGID: '1001'
             ARL: "{{ arl }}"
         volume:
-          - "{{ podman_vol }}:/config"
-          - "{{ music_vol }}:/downloads"
+          - "{{ podman_vol }}:/config:rw"
+          - "{{ music_vol }}:/downloads:rw"
         detach: yes
       tags: container-restart
