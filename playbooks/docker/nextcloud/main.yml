@@ -1,6 +1,5 @@
 ---
 - hosts: localhost
-#  become: true
 
   vars_files:
     - vars/main.yml
@@ -24,7 +23,7 @@
         state: directory
         mode: 777
         owner: ansible
-        group: ansible
+        group: deploy
       become: yes
 
     - name: Pull Nextcloud Container

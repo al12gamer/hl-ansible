@@ -1,7 +1,4 @@
 ---
 roles:
-  #- firewalld
-  - nginx
-
-collections:
-- name: containers.podman
+  - ansible-role-firewalld
+  - ansible-role-nginx

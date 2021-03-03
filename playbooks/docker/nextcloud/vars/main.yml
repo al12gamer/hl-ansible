@@ -12,7 +12,7 @@ firewalld_allowed_tcp_ports:
 # Nginx Settings
 domain: engelcc.com
 subdomain: nextcloud
-ipaddr: '192.168.1.110'
+ip_address: '192.168.1.110'
 listen_port: '8080'
 
 nextcloud_vol: /mnt/nextcloud

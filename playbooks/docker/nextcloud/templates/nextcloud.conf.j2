@@ -1,6 +1,6 @@
 server {
     server_name {{ subdomain }}.{{ domain }};
-    set $upstream {{ ipaddr }}:{{ listen_port }};
+    set $upstream {{ ip_address }}:{{ listen_port }};
 
     location / {
         proxy_pass_header Authorization;
