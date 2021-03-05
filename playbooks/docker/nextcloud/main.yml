@@ -28,15 +28,15 @@
 
     - name: Pull Nextcloud Container
       community.docker.docker_image:
-        name: "docker.io/library/nextcloud"
-        tag: stable
-        pull: yes
+        name: "library/nextcloud"
+        tag: latest
+        source: pull
         state: present
 
     - name: Restart Nextcloud Container
       community.docker.docker_container:
         name: nextcloud
-        image: library/nextcloud
+        image: library/nextcloud:latest
         state: started
         recreate: yes
         hostname: "{{ subdomain }}.{{ domain }}"
