@@ -1,0 +1,53 @@
+---
+- hosts: localhost
+
+  vars_files:
+    - vars/main.yml
+
+  roles:
+    - ansible-role-firewalld
+    - ansible-role-nginx
+
+  tasks:
+    - name: Copy Nginx server configuration in place.
+      become: yes
+      template:
+        src: templates/nextcloud.conf.j2
+        dest: /etc/nginx/conf.d/nextcloud.conf
+        mode: 0644
+      notify: restart nginx
+
+    - name: Create dir for persistent nextcloud vol
+      file:
+        path: "{{ nextcloud_vol }}"
+        state: directory
+        mode: 777
+        owner: ansible
+        group: deploy
+      become: yes
+
+    - name: Pull Nextcloud Container
+      community.docker.docker_image:
+        name: "library/nextcloud"
+        tag: latest
+        source: pull
+        state: present
+
+    - name: Restart Nextcloud Container
+      community.docker.docker_container:
+        name: nextcloud
+        image: library/nextcloud:latest
+        state: started
+        recreate: yes
+        hostname: "{{ subdomain }}.{{ domain }}"
+        restart_policy: "unless-stopped"
+        network_mode: "bridge"
+        ports: 
+          - "8080:80"
+        env:
+            PUID: '1001'
+            GUID: '1001'
+        volumes:
+          - "{{ nextcloud_vol }}:/var/www/html"
+        detach: yes
+      tags: container-restart

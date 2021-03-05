@@ -1,0 +1,8 @@
+---
+ipaddr: '192.81.215.116'
+nextcloud_vol: /mnt/nextcloud
+
+# Nginx Settings
+domain: striker.red
+subdomain: nextcloud
+listen_port: '8080'
