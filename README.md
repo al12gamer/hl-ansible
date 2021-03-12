@@ -1,5 +1,6 @@
-# hl-ansible
-ansible scripts used for homelab
+# Installs-Ansible
+ansible scripts used for [s31bz-postinstall](https://github.com/al12gamer/s31bz-postinstall) script
+This is forked from Joey's work on scripts, work in progress btw
 
 
 ## Setup:
